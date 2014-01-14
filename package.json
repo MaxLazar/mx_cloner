@@ -1,0 +1,12 @@
+{
+        "schema_version": "1.0",
+        "name" : "mx_cloner",
+        "label": "MX Cloner",
+        "version": "1.2.1",
+        "types": ["extension","accessory"],
+        "paths": {
+                "system": [
+                        "system/expressionengine/third_party/mx_cloner"
+                ]
+        }
+}
