@@ -44,26 +44,21 @@ class Mx_cloner_ext
 	 * @see http://codeigniter.com/user_guide/general/hooks.html
 	 **/
 	private $hooks = array(
-		'publish_form_entry_data'       => 'publish_form_entry_data'
+		'publish_form_entry_data'       => 'publish_form_entry_data',
+		'entry_submission_start' => 'entry_submission_start'
 
 	);
 	// -------------------------------
 	// Constructor
 	// -------------------------------
-	function Mx_cloner_ext($settings='')
-	{
-		$this->EE =& get_instance();
-		$this->settings = $settings;
-	}
 
 	public function __construct($settings=FALSE)
 	{
-		$this->EE =& get_instance();
 
 		// define a constant for the current site_id rather than calling $PREFS->ini() all the time
 		if
 		(defined('SITE_ID') == FALSE)
-			define('SITE_ID', $this->EE->config->item('site_id'));
+			define('SITE_ID', ee()->config->item('site_id'));
 
 		// set the settings for all other methods to access
 		$this->settings = ($settings == FALSE) ? $this->_getSettings() : $this->_saveSettingsToSession($settings);
@@ -78,8 +73,9 @@ class Mx_cloner_ext
 	 **/
 	public function settings_form()
 	{
-		$this->EE->lang->loadfile('mx_cloner');
-		$this->EE->load->model('channel_model');
+		ee()->lang->loadfile('mx_cloner');
+		ee()->load->model('channel_model');
+
 		// Create the variable array
 		$vars = array(
 			'addon_name' => $this->addon_name,
@@ -87,7 +83,7 @@ class Mx_cloner_ext
 			'input_prefix' => __CLASS__,
 			'message' => FALSE,
 			'settings_form' =>FALSE,
-			'channel_data' => $this->EE->channel_model->get_channels()->result(),
+			'channel_data' => ee()->channel_model->get_channels()->result(),
 			'language_packs' => ''
 		);
 
@@ -95,18 +91,18 @@ class Mx_cloner_ext
 		$vars['settings_form'] = TRUE;
 
 		if
-		($new_settings = $this->EE->input->post(__CLASS__))
+		($new_settings = ee()->input->post(__CLASS__))
 		{
 			$vars['settings'] = $new_settings;
 			$this->_saveSettingsToDB($new_settings);
-			$vars['message'] = $this->EE->lang->line('extension_settings_saved_success');
+			$vars['message'] = ee()->lang->line('extension_settings_saved_success');
 		}
 
 
 
-		$js = str_replace('"', '\"', str_replace("\n", "", $this->EE->load->view('form_settings', $vars, TRUE)));
+		$js = str_replace('"', '\"', str_replace("\n", "", ee()->load->view('form_settings', $vars, TRUE)));
 
-		return $this->EE->load->view('form_settings', $vars, true);
+		return ee()->load->view('form_settings', $vars, true);
 
 	}
 	// END
@@ -119,14 +115,24 @@ class Mx_cloner_ext
 	 * @param mixed $data
 	 * @return void
 	 */
-	function entry_submission_start($data)
+	function entry_submission_start($channel_id, $autosave)
 	{
 
-		if  ($this->EE->input->get('clone') == 'y')
+		if  (ee()->input->get('clone') == 'y')
 		{
-
+			$data =& ee()->api_channel_entries->data;
 			$_GET['entry_id'] ='';
+			foreach ($data as $key => $value) {
+				if(is_array($data[$key])) {
+					foreach ($data[$key] as $row => $val) {
+						if (strpos($row, 'row_id_') !== false) {
+							$data[$key][str_replace("row_id_", "new_row_", $row)] = $data[$key][$row];
+							unset($data[$key][$row]);
+						} 
+					}
 
+				}
+			}
 		}
 
 		return false;
@@ -142,7 +148,7 @@ class Mx_cloner_ext
 	function publish_form_entry_data($data)
 	{
 
-		if  ($this->EE->input->get('clone') == 'y')
+		if  (ee()->input->get('clone') == 'y')
 		{
 
 			$suffix = (isset($this->settings['title_suffix'])) ? $this->settings['title_suffix'] : '';
@@ -154,7 +160,7 @@ class Mx_cloner_ext
 				'versioning_enabled' => 'n',
 				'recent_comment_date' => '',
 				'comment_total' => '' ,
-				'ip_address' => $this->EE->input->ip_address(),
+				'ip_address' => ee()->input->ip_address(),
 			);
 
 			if (isset($this->settings['update_time']))
@@ -205,9 +211,9 @@ class Mx_cloner_ext
 	{
 		$settings = FALSE;
 		if
-		(isset($this->EE->session->cache[$this->addon_name][__CLASS__]['settings']) === FALSE || $refresh === TRUE)
+		(isset(ee()->session->cache[$this->addon_name][__CLASS__]['settings']) === FALSE || $refresh === TRUE)
 		{
-			$settings_query = $this->EE->db->select('settings')
+			$settings_query = ee()->db->select('settings')
 			->where('enabled', 'y')
 			->where('class', __CLASS__)
 			->get('extensions', 1);
@@ -221,7 +227,7 @@ class Mx_cloner_ext
 		}
 		else
 		{
-			$settings = $this->EE->session->cache[$this->addon_name][__CLASS__]['settings'];
+			$settings = ee()->session->cache[$this->addon_name][__CLASS__]['settings'];
 		}
 		return $settings;
 	}
@@ -238,13 +244,13 @@ class Mx_cloner_ext
 	{
 		// if there is no $sess passed and EE's session is not instaniated
 		if
-		($sess == FALSE && isset($this->EE->session->cache) == FALSE)
+		($sess == FALSE && isset(ee()->session->cache) == FALSE)
 			return $settings;
 
 		// if there is an EE session available and there is no custom session object
 		if
-		($sess == FALSE && isset($this->EE->session) == TRUE)
-			$sess =& $this->EE->session;
+		($sess == FALSE && isset(ee()->session) == TRUE)
+			$sess =& ee()->session;
 
 		// Set the settings in the cache
 		$sess->cache[$this->addon_name][__CLASS__]['settings'] = $settings;
@@ -264,7 +270,7 @@ class Mx_cloner_ext
 	 **/
 	private function _saveSettingsToDB($settings)
 	{
-		$this->EE->db->where('class', __CLASS__)
+		ee()->db->where('class', __CLASS__)
 		->update('extensions', array('settings' => serialize($settings)));
 	}
 	/**
@@ -306,7 +312,7 @@ class Mx_cloner_ext
 
 			$hook = array_merge($hook_template, $data);
 			$hook['settings'] = serialize($hook['settings']);
-			$this->EE->db->query($this->EE->db->insert_string('exp_extensions', $hook));
+			ee()->db->query(ee()->db->insert_string('exp_extensions', $hook));
 		}
 	}
 
@@ -320,7 +326,7 @@ class Mx_cloner_ext
 	 **/
 	private function _deleteHooks()
 	{
-		$this->EE->db->query("DELETE FROM `exp_extensions` WHERE `class` = '".__CLASS__."'");
+		ee()->db->query("DELETE FROM `exp_extensions` WHERE `class` = '".__CLASS__."'");
 	}
 
 
@@ -341,12 +347,14 @@ class Mx_cloner_ext
 			return FALSE;
 		}
 
-		if ($current < '2.0.1')
+		if ($current < '1.2.4')
 		{
-			// Update to next version
+			
+			$this->_createHooks(array('entry_submission_start'));
+
 		}
 
-		$this->EE->db->query("UPDATE exp_extensions SET version = '".$this->EE->db->escape_str($this->version)."' WHERE class = '".get_class($this)."'");
+		ee()->db->query("UPDATE exp_extensions SET version = '".ee()->db->escape_str($this->version)."' WHERE class = '".get_class($this)."'");
 	}
 	// END
 
@@ -357,7 +365,7 @@ class Mx_cloner_ext
 	function disable_extension()
 	{
 
-		$this->EE->db->delete('exp_extensions', array('class' => get_class($this)));
+		ee()->db->delete('exp_extensions', array('class' => get_class($this)));
 	}
 	// END
 }

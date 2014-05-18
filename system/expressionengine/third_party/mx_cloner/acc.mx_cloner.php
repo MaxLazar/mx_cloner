@@ -31,11 +31,11 @@ class mx_cloner_acc
 	*/
 	function set_sections()
 	{
-		$EE =& get_instance();
+		
 		
 		$out = '<script type="text/javascript" charset="utf-8">$("#accessoryTabs a.mx_cloner").parent().remove();';
 		
-		if  ($EE->input->get('C') == 'content_edit') {
+		if  (ee()->input->get('C') == 'content_edit') {
 		$out .='
 	
 		$("#entries_form table tbody tr").live("mouseenter", function() {
@@ -59,13 +59,13 @@ class mx_cloner_acc
 		';
 		};
 
-		$EE->lang->loadfile('mx_cloner');
+		ee()->lang->loadfile('mx_cloner');
 
 
-		if  ($EE->input->get('clone') == 'y') {
+		if  (ee()->input->get('clone') == 'y') {
 			$out .= '$("input[name=\'entry_id\']").val("");
 						EE.publish.which="new";
-						$(".contents .heading").html("<h2>" + "'.$EE->lang->line('clone_entry').'" + "</h2>");		
+						$(".contents .heading").html("<h2>" + "'.ee()->lang->line('clone_entry').'" + "</h2>");		
 			if (typeof EE.publish.autosave != "undefined" ) {
 				delete EE.publish.autosave;
 			};
