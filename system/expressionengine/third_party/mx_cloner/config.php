@@ -13,7 +13,7 @@ if (! defined('MX_CLONER_KEY'))
 /**
  * < EE 2.6.0 backward compat
  */
- 
+
 if ( ! function_exists('ee'))
 {
     function ee()

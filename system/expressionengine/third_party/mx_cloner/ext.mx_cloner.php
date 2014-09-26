@@ -12,10 +12,8 @@ require_once PATH_THIRD . 'mx_cloner/config.php';
  * @package  ExpressionEngine
  * @category Extension
  * @author    Max Lazar <max@eec.ms>
- * @copyright Copyright (c) 2010 Max Lazar (http://eec.ms)
+ * @copyright Copyright (c) 2014 Max Lazar (http://eec.ms)
  * @license   http://creativecommons.org/licenses/MIT/  MIT License
- * @version 1.1.2
- * @Thanks to Leevi Graham (http://leevigraham.com/) for permission to use his SET/GET settings function for EE2!
  */
 
 
@@ -128,7 +126,7 @@ class Mx_cloner_ext
 						if (strpos($row, 'row_id_') !== false) {
 							$data[$key][str_replace("row_id_", "new_row_", $row)] = $data[$key][$row];
 							unset($data[$key][$row]);
-						} 
+						}
 					}
 
 				}
@@ -349,7 +347,7 @@ class Mx_cloner_ext
 
 		if ($current < '1.2.4')
 		{
-			
+
 			$this->_createHooks(array('entry_submission_start'));
 
 		}
