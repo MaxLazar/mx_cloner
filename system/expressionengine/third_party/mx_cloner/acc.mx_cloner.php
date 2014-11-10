@@ -70,7 +70,12 @@ class mx_cloner_acc
 			if (typeof EE.publish.autosave != "undefined" ) {
 				delete EE.publish.autosave;
 			};
-			//$.each(".grid_cell").find ()
+
+			$("[name*=\'row_id_\']").each(function (e) {
+					var grid_name = $(this).attr("name");
+					grid_name =  grid_name.replace("row_id_", "new_row_");
+					$(this).attr("name", grid_name);
+			});
 
 			$("input[name=\'nsm_better_meta__meta[0][id]\']").val("");
 
