@@ -47,6 +47,6 @@ Please submit a merge request after you finish development.
 The MX Cloner is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
 ###Change log
-####1.2.7 (release date: december 7, 2014)
-* Expression Store production field support (sponsored by [Karl Golts](www.linkedin.com/pub/karl-golts/6/940/aa4))
+####1.2.7 (release date: December 7, 2014)
+* Expresso Store production field support (sponsored by [Karl Golts](www.linkedin.com/pub/karl-golts/6/940/aa4))
 * Add Zenbu support; Thanks to [jaseclamp](http://devot-ee.com/profile/user21686489)
