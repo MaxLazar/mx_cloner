@@ -40,7 +40,7 @@ You may participate in the following ways:
 * Fix issues, develop features, write/polish documentation
 Before you start, please adopt an existing issue (labelled with "ready for adoption") or start a new one to avoid duplicated efforts.
 Please submit a merge request after you finish development.
-* You can also be a **sponsor** of any additional features. Send me email - max @ eec.ms
+* You can be a **sponsor** of additional features. Send an email to max @ eec.ms
 
 ###License
 
