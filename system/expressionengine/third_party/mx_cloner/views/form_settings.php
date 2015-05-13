@@ -29,7 +29,10 @@ array("file" => "mx_cloner")
 <td><?= lang('url_title_suffix')?></td>
 <td><input dir="ltr" style="width: 100%;" name="<?=$input_prefix; ?>[url_suffix]" id="" value="<?=((isset($settings['url_suffix'])) ? $settings['url_suffix'] : '' );?>" size="20" maxlength="120" class="input" type="text"></td>
 </tr>
-
+<tr>
+<td><?= lang('empty_url_title')?></td>
+<td><input type="checkbox" name="<?=$input_prefix;?>[empty_url_title]" value="y" <?= ((isset($settings['empty_url_title'])) ? (($settings['empty_url_title'] == 'y') ? " checked=checked'" : "" ) : "");?>/></td>
+</tr>
 <tr>
 <td><?= lang('update_entry_time')?></td>
 <td><input type="checkbox" name="<?=$input_prefix;?>[update_time]" value="y" <?= ((isset($settings['update_time'])) ? (($settings['update_time'] == 'y') ? " checked=checked'" : "" ) : "");?>/></td>
