@@ -8,6 +8,7 @@ $lang = array(
 
 ,'title_field_suffix'=>'Title Field Suffix'
 ,'url_title_suffix'=>'URL Title Suffix'
+,'empty_url_title'=>'Empty URL Title'
 ,'update_entry_time'=>'Update Entry Time?'
 ,'clone_entry' => 'Clone Entry'
 /* END */
