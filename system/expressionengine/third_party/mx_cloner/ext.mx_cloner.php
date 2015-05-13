@@ -155,6 +155,7 @@ class Mx_cloner_ext
 			$ext_data= array (
 				'title' => $data['title'].$suffix,
 				'url_title' => $data['url_title'].$url_suffix,
+				'structure__uri' => $data['url_title'].$url_suffix,
 				'versioning_enabled' => 'n',
 				'recent_comment_date' => '',
 				'comment_total' => '' ,
