@@ -17,14 +17,14 @@ This extension adds the ability to clone entries in CP.
 
 ##Activation
 * Log into your control panel
-* Enable MX Cloner extension & accessory 
+* Enable MX Cloner extension & accessory
 
 ##Field settings
 **Title Field Suffix**	 Title prefix for new entry
 
 **URL Title Suffix**	URL Title prefix for new entry
 
-**Update Entry Time?**	
+**Update Entry Time?**
 
 ##Support Policy
 
@@ -47,6 +47,9 @@ Please submit a merge request after you finish development.
 The MX Cloner is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
 ###Change log
+####1.2.8 (release date: June 3, 2015)
+* Zenbu fix
+
 ####1.2.7 (release date: December 7, 2014)
 * Expresso Store production field support (sponsored by [Karl Golts](http://www.linkedin.com/pub/karl-golts/6/940/aa4))
 * Add Zenbu support; Thanks to [jaseclamp](http://devot-ee.com/profile/user21686489)
