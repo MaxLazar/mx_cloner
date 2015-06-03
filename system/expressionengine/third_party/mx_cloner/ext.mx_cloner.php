@@ -151,15 +151,26 @@ class Mx_cloner_ext
 
 			$suffix = (isset($this->settings['title_suffix'])) ? $this->settings['title_suffix'] : '';
 			$url_suffix = (isset($this->settings['url_suffix'])) ? $this->settings['url_suffix'] : '' ;
+			$empty_url_title = (isset($this->settings['empty_url_title'])) ? $this->settings['empty_url_title'] : '' ;
 
 			$ext_data= array (
 				'title' => $data['title'].$suffix,
 				'url_title' => $data['url_title'].$url_suffix,
+				'structure__uri' => $data['url_title'].$url_suffix,
 				'versioning_enabled' => 'n',
 				'recent_comment_date' => '',
 				'comment_total' => '' ,
 				'ip_address' => ee()->input->ip_address(),
 			);
+
+			//empty the url title
+			if($empty_url_title)
+			{
+				$ext_data= array (
+					'url_title' => '',
+					'structure__uri' => '',
+				);
+			}
 
 			if (isset($this->settings['update_time']))
 			{
